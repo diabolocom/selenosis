@@ -231,6 +231,16 @@ func (app *App) HandleProxy(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func MakeFileEndpointHandler(handle http.HandlerFunc) http.HandlerFunc {
+	suffix := "/se/file"
+	return func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, suffix) {
+			r.URL.Path = strings.TrimSuffix(r.URL.Path, suffix) + "/file"
+		}
+		handle(w, r)
+	}
+}
+
 //HandleHubStatus ...
 func (app *App) HandleHubStatus(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")

@@ -569,6 +569,31 @@ func TestHandleStatus(t *testing.T) {
 
 }
 
+func TestMakeFileEndpointHandler(t *testing.T) {
+	tests := map[string]struct {
+		before string
+		after string
+	} {
+		"Test removing `/se` from path": {
+			before: "anything/se/file",
+			after: "anything/file",
+		},
+		"Test removing `/se` from path where no `se` at all": {
+			before: "anything/file",
+			after: "anything/file",
+		},
+	}
+	for name, test := range tests {
+		t.Logf("TC %s", name)
+		f := func(w http.ResponseWriter, r *http.Request) {
+			assert.Equal(t, r.URL.Path, test.after)
+		}
+		wrapped := MakeFileEndpointHandler(f)
+		request := http.Request{URL: &url.URL{Path: test.before}}
+		wrapped(nil, &request)
+	}
+}
+
 func initApp(p *PlatformMock) *App {
 	logger := &logrus.Logger{}
 	client := NewPlatformMock(p)
