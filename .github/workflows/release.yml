@@ -35,5 +35,4 @@ jobs:
           push: true
           build-args: BUILD_VERSION=${{ steps.get_version.outputs.VERSION }}
           tags: |
-            alcounit/selenosis:latest
-            alcounit/selenosis:${{ steps.get_version.outputs.VERSION }}
+            diabolocom/selenosis:${{ steps.get_version.outputs.VERSION }}
